@@ -1,3 +1,13 @@
 # Use this file to templatize your application's native configuration files.
 # See the docs at https://www.habitat.sh/docs/create-packages-configure/.
 # You can safely delete this file if you don't need it.
+
+[log]
+# log level: debug, info, warn, error, fatal (default 'info')
+# THEIR default is info, so... uh we're overriding that for now
+level = "debug"
+# log format, one of json, text, console
+format = "text"
+# disable automatic timestamps in output
+# no idea why you'd want this, we default to the default
+disable-timestamp = false

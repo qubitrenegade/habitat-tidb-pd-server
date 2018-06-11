@@ -1,13 +1,14 @@
 # This file is the heart of your application's habitat.
 # See full docs at https://www.habitat.sh/docs/reference/plan-syntax/
 
-pkg_name=tikv-pd-server
+pkg_name=pd
 pkg_distname=pd-server
 pkg_origin=qubitrenegade
 pkg_version=2.0.3
 pkg_maintainer=""
 pkg_license=("MPL-2")
-pkg_source=https://github.com/pingcap/pd/archive/v${pkg_version}.tar.gz
+pkg_source=http://download.pingcap.org/tidb-latest-linux-amd64.tar.gz
+# pkg_source=https://github.com/pingcap/pd/archive/v${pkg_version}.tar.gz
 # pkg_source=github.com/pingcap/pd
 # Optional.
 # The resulting filename for the download, typically constructed from the
@@ -21,7 +22,7 @@ pkg_source=https://github.com/pingcap/pd/archive/v${pkg_version}.tar.gz
 # and using the sha256sum or gsha256sum tools. Also, if you do not have
 # do_verify() overridden, and you do not have the correct sha-256 sum, then the
 # expected value will be shown in the build output of your package.
-pkg_shasum="de356c14d1291b50b259c91a9f705ec587dca6b96ac7209d1e82f952687e06bf"
+pkg_shasum="37ddca23b740510c48510f637b64d3636dbff9f0c7614e6773b1e0c0d3841b1b"
 
 
 # Optional.
@@ -29,7 +30,7 @@ pkg_shasum="de356c14d1291b50b259c91a9f705ec587dca6b96ac7209d1e82f952687e06bf"
 # at three levels of specificity: `origin/package`, `origin/package/version`, or
 # `origin/package/version/release`.
 pkg_deps=(core/bash)
-pkg_build_deps=(core/make core/gcc core/go)
+pkg_build_deps=()
 # pkg_scaffolding=core/scaffolding-go
 
 # Optional.
@@ -142,47 +143,12 @@ pkg_upstream_url="https://github.com/pingcap/pd"
 # plan build script:
 # https://github.com/habitat-sh/habitat/tree/master/components/plan-build/bin/hab-plan-build.sh
 
-# There is no default implementation of this callback. You can use it to execute
-# any arbitrary commands before anything else happens.
-
-path_vars() {
-  GOPATH=$(go env GOPATH)
-  src_root=${GOPATH}/src/github.com/pingcap
-}
-
-do_begin() {
-  return 0
-}
-
-# The default implementation is that the software specified in $pkg_source is
-# downloaded, checksum-verified, and placed in $HAB_CACHE_SRC_PATH/$pkgfilename,
-# which resolves to a path like /hab/cache/src/filename.tar.gz. You should
-# override this behavior if you need to change how your binary source is
-# downloaded, if you are not downloading any source code at all, or if your are
-# cloning from git. If you do clone a repo from git, you must override
-# do_verify() to return 0.
-do_download() {
-  do_default_download
-}
-
-# The default implementation tries to verify the checksum specified in the plan
-# against the computed checksum after downloading the source tarball to disk.
-# If the specified checksum doesn't match the computed checksum, then an error
-# and a message specifying the mismatch will be printed to stderr. You should
-# not need to override this behavior unless your package does not download
-# any files.
-do_verify() {
-  do_default_verify
-}
 
 # The default implementation removes the HAB_CACHE_SRC_PATH/$pkg_dirname folder
 # in case there was a previously-built version of your package installed on
 # disk. This ensures you start with a clean build environment.
 do_clean() {
-  path_vars
-  attach
-  src_root=${GOPATH}/src/github.com/pingcap
-  rm -rf $src_root/pd 
+  rm -vrf ${HAB_CACHE_SRC_PATH}/tidb-latest-linux-amd64/
   do_default_clean
 }
 
@@ -201,10 +167,7 @@ do_unpack() {
 # any actions before the package starts building, such as exporting variables,
 # adding symlinks, and so on.
 do_prepare() {
-  src_root=${GOPATH}/src/github.com/pingcap
-  mkdir -p ${src_root}
-  mv ${HAB_CACHE_SRC_PATH}/pd-${pkg_version} $src_root/
-  return 0
+  cp -v ${HAB_CACHE_SRC_PATH}/tidb-latest-linux-amd64/bin/pd-* ${HAB_CACHE_SRC_PATH}/$pkg_dirname
 }
 
 # The default implementation is to update the prefix path for the configure
@@ -215,7 +178,6 @@ do_prepare() {
 # build and install as part of building your package.
 do_build() {
   attach
-  do_default_build
 }
 
 # The default implementation runs nothing during post-compile. An example of a
@@ -235,7 +197,7 @@ do_check() {
 # specific directories in your package, or installing pre-built binaries into
 # your package.
 do_install() {
-  do_default_install
+  attach
 }
 
 # The default implementation is to strip any binaries in $pkg_prefix of their

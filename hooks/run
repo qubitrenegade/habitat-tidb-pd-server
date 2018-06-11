@@ -1,0 +1,4 @@
+#!{{pkgPathFor "core/bash"}}/bin/bash
+
+exec pd-server -config 
+  
