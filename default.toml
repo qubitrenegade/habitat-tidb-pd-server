@@ -10,4 +10,6 @@ level = "debug"
 format = "text"
 # disable automatic timestamps in output
 # no idea why you'd want this, we default to the default
-disable-timestamp = false
+# ... oh I see why now...
+# disable-timestamp = false
+disable-timestamp = true

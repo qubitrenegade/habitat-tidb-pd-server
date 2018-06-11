@@ -13,7 +13,7 @@ advertise-peer-urls = ""
 
 initial-cluster = """
 {{#eachAlive svc.members as |member| ~}}
-  {{member.sys.hostname}}={{member.sys.ip}}:2380{{~#unless @last}},{{/unless}}
+  {{member.sys.hostname}}=http://{{member.sys.ip}}:2380{{~#unless @last}},{{/unless}}
 {{/eachAlive ~}}
 """
 initial-cluster-state = "new"
