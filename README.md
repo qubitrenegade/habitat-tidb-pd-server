@@ -15,34 +15,45 @@ hab pkg export docker qubitrenegade/pd
 docker run qubitrenegade/pd --peer 172.17.0.2 --peer 172.17.0.3 --peer 172.17.0.4 --topology leader
 ```
 
-Not sure if it's actually running or not...
+Seems to work in limited testing.
 
-The initial cluster should only be build once Habitat has a quorum.   (thought it seems you can start in solo mode?).  It's setup to broadcast {{sys.ip}} for cluster communications.  
-
-This bit:
 
 ```
-initial-cluster = """
-{{#eachAlive svc.members as |member| ~}}
-  {{member.sys.hostname}}=http://{{member.sys.ip}}:2380{{~#unless @last}},{{/unless}}
-{{/eachAlive ~}}
-"""
+$ curl http://172.17.0.4:2379/v2/members 2>/dev/null | jq    
+{
+  "members": [
+    {
+      "id": "1af57124460c9172",
+      "name": "0226d8f47626",
+      "peerURLs": [
+        "http://172.17.0.5:2380"
+      ],
+      "clientURLs": [
+        "http://172.17.0.5:2379"
+      ]
+    },
+    {
+      "id": "660aa483274d103a",
+      "name": "d292cd6ad4a3",
+      "peerURLs": [
+        "http://172.17.0.3:2380"
+      ],
+      "clientURLs": [
+        "http://172.17.0.3:2379"
+      ]
+    },
+    {
+      "id": "ad0233873e2a0054",
+      "name": "65c7aa293f48",
+      "peerURLs": [
+        "http://172.17.0.4:2380"
+      ],
+      "clientURLs": [
+        "http://172.17.0.4:2379"
+      ]
+    }
+  ]
+}
 ```
-
-Searches for each member of the svc group, and builds a string, e.g.:
-
-```
-initial-cluster = """
-  foo=http://172.17.0.2:2380,
-  bar=http://172.17.0.3:2380,
-  baz=http://172.17.0.3:2380
-"""
-```
-
-PD seems to be upset about something to do with Jenkins:
-
-```
-pd.default(E): main.go:92: [fatal] run server failed: /home/jenkins/workspace/build_pd_master/go/src/github.com/pingcap/pd/server/server.go:161: receive signal terminated when waiting embed etcd to be ready
-pd.default(E): /home/jenkins/workspace/build_pd_master/go/src/github.com/pingcap/pd/server/server.go:285```
 
 Welcome any feedback...
