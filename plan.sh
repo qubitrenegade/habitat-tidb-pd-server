@@ -30,7 +30,7 @@ pkg_shasum="de356c14d1291b50b259c91a9f705ec587dca6b96ac7209d1e82f952687e06bf"
 # at three levels of specificity: `origin/package`, `origin/package/version`, or
 # `origin/package/version/release`.
 pkg_deps=(core/bash)
-pkg_build_deps=(core/make core/gcc core/go core/coreutils)
+pkg_build_deps=(core/make core/gcc core/go/1.8 core/coreutils)
 pkg_scaffolding=core/scaffolding-go
 
 # Optional.
@@ -149,6 +149,7 @@ pkg_upstream_url="https://github.com/pingcap/pd"
 path_vars() {
   GOPATH=$(go env GOPATH)
   src_root=${GOPATH}/src/github.com/pingcap/pd
+  scaffolding_go_pkg_path=$src_root
 }
 
 do_begin() {
@@ -206,6 +207,7 @@ do_prepare() {
 # build and install as part of building your package.
 do_build() {
   path_vars
+  attach
   do_default_build
   attach
 }
