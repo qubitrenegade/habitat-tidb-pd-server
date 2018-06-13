@@ -3,11 +3,11 @@
 name = "{{sys.hostname}}"
 data-dir = "{{pkg.svc_data_path}}"
 
-client-urls = "http://{{sys.ip}}:2379"
+client-urls = "http://{{sys.ip}}:{{cfg.client-port}}"
 # if not set, use ${client-urls}
 advertise-client-urls = ""
 
-peer-urls = "http://{{sys.ip}}:2380"
+peer-urls = "http://{{sys.ip}}:{{cfg.peer-port}}"
 # if not set, use ${peer-urls}
 advertise-peer-urls = ""
 
