@@ -11,8 +11,8 @@ pkg_build_deps=()
 pkg_bin_dirs=(bin)
 
 pkg_exports=(
-  [client-port]=cfg.client-port
-  [peer-port]=cfg.peer-port
+  [client-port]=client-port
+  [peer-port]=peer-port
 )
 
 pkg_exposes=(client-port peer-port)
@@ -21,7 +21,7 @@ pkg_exposes=(client-port peer-port)
 # pkg_svc_user="hab"
 # pkg_svc_group="$pkg_svc_user"
 
-pkg_description="PD - Placement Driver for TiKV; "
+pkg_description="PD - Placement Driver for TiKV; https://github.com/qubitrenegade/habitat-tidb-pd-server"
 pkg_upstream_url="https://github.com/pingcap/pd"
 
 do_clean() {

@@ -1,3 +1,5 @@
+# refer to the full documentation: https://github.com/pingcap/docs
+
 initial-cluster-state = "new"
 lease = 3
 tso-save-interval = "3s"
