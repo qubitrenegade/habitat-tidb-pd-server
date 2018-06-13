@@ -30,8 +30,8 @@ pkg_shasum="de356c14d1291b50b259c91a9f705ec587dca6b96ac7209d1e82f952687e06bf"
 # at three levels of specificity: `origin/package`, `origin/package/version`, or
 # `origin/package/version/release`.
 pkg_deps=(core/bash)
-pkg_build_deps=(core/make core/gcc core/go core/coreutils)
-pkg_scaffolding=core/scaffolding-go
+pkg_build_deps=(core/make core/gcc core/go core/coreutils core/git)
+# pkg_scaffolding=core/scaffolding-go
 
 # Optional.
 # An array of paths, relative to the final install of the software, where
@@ -155,10 +155,10 @@ do_begin() {
   return 0
 }
 
-do_download() {
-  # wget -O ${HAB_CACHE_SRC_PATH}/${pkg_filename} ${pkg_source}
-  download_file $pkg_source $pkg_filename $pkg_shasum
-}
+# do_download() {
+#   # wget -O ${HAB_CACHE_SRC_PATH}/${pkg_filename} ${pkg_source}
+#   download_file $pkg_source $pkg_filename $pkg_shasum
+# }
 
 # The default implementation tries to verify the checksum specified in the plan
 # against the computed checksum after downloading the source tarball to disk.
@@ -166,9 +166,9 @@ do_download() {
 # and a message specifying the mismatch will be printed to stderr. You should
 # not need to override this behavior unless your package does not download
 # any files.
-do_verify() {
-  verify_file $pkg_filename $pkg_shasum
-}
+# do_verify() {
+#   verify_file $pkg_filename $pkg_shasum
+# }
 
 # The default implementation removes the HAB_CACHE_SRC_PATH/$pkg_dirname folder
 # in case there was a previously-built version of your package installed on
@@ -176,6 +176,7 @@ do_verify() {
 do_clean() {
   path_vars
   rm -rf $src_root/*
+  do_default_clean
 }
 
 # The default implementation extracts your tarball source file into
@@ -183,9 +184,9 @@ do_clean() {
 # .tar.xz, .rar, .zip, .Z, .7z. If the file archive could not be found or was
 # not supported, then a message will be printed to stderr with additional
 # information.
-do_unpack() {
-  unpack_file $pkg_filename
-}
+# do_unpack() {
+#   unpack_file $pkg_filename
+# }
 
 # There is no default implementation of this callback. At this point in the
 # build process, the tarball source has been downloaded, unpacked, and the build
@@ -206,7 +207,9 @@ do_prepare() {
 # build and install as part of building your package.
 do_build() {
   path_vars
-  do_default_build
+  pushd ${src_root}
+  make
+  # do_default_build
   attach
 }
 
