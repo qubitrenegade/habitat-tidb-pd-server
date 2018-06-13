@@ -1,8 +1,9 @@
 # This file is the heart of your application's habitat.
 # See full docs at https://www.habitat.sh/docs/reference/plan-syntax/
 
-pkg_name=tikv-pd-server
-pkg_distname=pd-server
+# pkg_name=tikv-pd-server
+# pkg_distname=pd-server
+pkg_name=pd
 pkg_origin=qubitrenegade
 pkg_version=2.0.3
 pkg_maintainer=""
@@ -12,7 +13,7 @@ pkg_source=https://github.com/pingcap/pd/archive/v${pkg_version}.tar.gz
 # Optional.
 # The resulting filename for the download, typically constructed from the
 # pkg_name and pkg_version values.
-# pkg_filename="${pkg_name}-${pkg_version}.tar.gz"
+pkg_filename="${pkg_name}-${pkg_version}.tar.gz"
 
 
 # Required if a valid URL is provided for pkg_source or unless do_verify() is overridden.
@@ -29,8 +30,8 @@ pkg_shasum="de356c14d1291b50b259c91a9f705ec587dca6b96ac7209d1e82f952687e06bf"
 # at three levels of specificity: `origin/package`, `origin/package/version`, or
 # `origin/package/version/release`.
 pkg_deps=(core/bash)
-pkg_build_deps=(core/make core/gcc core/go)
-# pkg_scaffolding=core/scaffolding-go
+pkg_build_deps=(core/make core/gcc core/go core/coreutils)
+pkg_scaffolding=core/scaffolding-go
 
 # Optional.
 # An array of paths, relative to the final install of the software, where
@@ -147,22 +148,16 @@ pkg_upstream_url="https://github.com/pingcap/pd"
 
 path_vars() {
   GOPATH=$(go env GOPATH)
-  src_root=${GOPATH}/src/github.com/pingcap
+  src_root=${GOPATH}/src/github.com/pingcap/pd
 }
 
 do_begin() {
   return 0
 }
 
-# The default implementation is that the software specified in $pkg_source is
-# downloaded, checksum-verified, and placed in $HAB_CACHE_SRC_PATH/$pkgfilename,
-# which resolves to a path like /hab/cache/src/filename.tar.gz. You should
-# override this behavior if you need to change how your binary source is
-# downloaded, if you are not downloading any source code at all, or if your are
-# cloning from git. If you do clone a repo from git, you must override
-# do_verify() to return 0.
 do_download() {
-  do_default_download
+  # wget -O ${HAB_CACHE_SRC_PATH}/${pkg_filename} ${pkg_source}
+  download_file $pkg_source $pkg_filename $pkg_shasum
 }
 
 # The default implementation tries to verify the checksum specified in the plan
@@ -172,7 +167,7 @@ do_download() {
 # not need to override this behavior unless your package does not download
 # any files.
 do_verify() {
-  do_default_verify
+  verify_file $pkg_filename $pkg_shasum
 }
 
 # The default implementation removes the HAB_CACHE_SRC_PATH/$pkg_dirname folder
@@ -180,10 +175,7 @@ do_verify() {
 # disk. This ensures you start with a clean build environment.
 do_clean() {
   path_vars
-  attach
-  src_root=${GOPATH}/src/github.com/pingcap
-  rm -rf $src_root/pd 
-  do_default_clean
+  rm -rf $src_root/*
 }
 
 # The default implementation extracts your tarball source file into
@@ -192,7 +184,7 @@ do_clean() {
 # not supported, then a message will be printed to stderr with additional
 # information.
 do_unpack() {
-  do_default_unpack
+  unpack_file $pkg_filename
 }
 
 # There is no default implementation of this callback. At this point in the
@@ -201,10 +193,9 @@ do_unpack() {
 # any actions before the package starts building, such as exporting variables,
 # adding symlinks, and so on.
 do_prepare() {
-  src_root=${GOPATH}/src/github.com/pingcap
+  path_vars
   mkdir -p ${src_root}
-  mv ${HAB_CACHE_SRC_PATH}/pd-${pkg_version} $src_root/
-  return 0
+  cp -r ./* $src_root/
 }
 
 # The default implementation is to update the prefix path for the configure
@@ -214,8 +205,9 @@ do_prepare() {
 # if you have additional configuration changes to make or other software to
 # build and install as part of building your package.
 do_build() {
-  attach
+  path_vars
   do_default_build
+  attach
 }
 
 # The default implementation runs nothing during post-compile. An example of a
