@@ -16,5 +16,27 @@ initial-cluster = """
   {{~member.sys.hostname}}=http://{{member.sys.ip}}:2380{{~#unless @last~}},{{/unless~}}
 {{~/eachAlive ~}}
 """
+initial-cluster-state = "{{cfg.initial-cluster-state}}"
+lease = {{cfg.lease}}
+tso-save-interval = "{{cfg.tso-save-interval}}"
+namespace-classifier = "{{cfg.namespace-classifier}}"
 
-{{toToml cfg}}
+{{#if cfg.security}}
+[security]
+{{toToml cfg.security}}
+{{/if}}
+
+[log]
+{{toToml cfg.log}}
+
+[metric]
+{{toToml cfg.metric}}
+
+[schedule]
+{{toToml cfg.schedule}}
+
+[replication]
+{{toToml cfg.replication}}
+
+[label-property]
+{{toToml cfg.label-property}}
