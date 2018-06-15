@@ -4,8 +4,8 @@ pkg_origin=qubitrenegade
 pkg_version=2.0.3
 pkg_maintainer="QubitRenegade <qubitrenegade@gmail.com>"
 pkg_license=("MPL-2")
-pkg_source=http://download.pingcap.org/tidb-latest-linux-amd64.tar.gz
-pkg_shasum=1c58d4837a0e6da6a034e8ff48da073f8119bd3c9bf3dc56442a42aed4978c6c
+pkg_source=http://download.pingcap.org/tidb-v${pkg_version}-linux-amd64.tar.gz
+pkg_shasum=5a5d153f3df4cb286de92619edae0f7de910f8f7c29a81385d2790ad13b5bb17
 pkg_deps=(core/bash)
 pkg_build_deps=()
 pkg_bin_dirs=(bin)
@@ -26,14 +26,14 @@ pkg_upstream_url="https://github.com/pingcap/pd"
 
 do_clean() {
   # remove any old binaries
-  rm -rf ${HAB_CACHE_SRC_PATH}/tidb-latest-linux-amd64/
+  build_line $(rm -rf ${HAB_CACHE_SRC_PATH}/tidb-v${pkg_version}-linux-amd64/)
   do_default_clean
 }
 
 do_prepare() {
   # the binaries are distributed together.  We'll separate them out now
-  cp -v ${HAB_CACHE_SRC_PATH}/tidb-latest-linux-amd64/bin/${pkg_name}* \
-    ${HAB_CACHE_SRC_PATH}/$pkg_dirname
+  build_line $(cp -v ${HAB_CACHE_SRC_PATH}/tidb-v${pkg_version}-linux-amd64/bin/${pkg_name}* \
+    ${HAB_CACHE_SRC_PATH}/$pkg_dirname)
 }
 
 do_build() {
@@ -45,7 +45,7 @@ do_install() {
   # iterate through all of the files in ${HAB_CACHE_SRC_PATH}/$pkg_dirname
   for i in ./${pkg_name}*; do
     install_path=${pkg_prefix}/bin/${i}
-    echo "installing ${i} to ${install_path}"
+    build_line "installing ${i} to ${install_path}"
     install -D ${i} ${install_path}
   done
 }

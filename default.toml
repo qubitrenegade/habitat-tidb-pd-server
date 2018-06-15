@@ -29,7 +29,7 @@ disable-timestamp = true
 
 # file logging
 [log.file]
-#filename = ""
+filename = ""
 # max log file size in MB
 #max-size = 300
 # max log file keep days
