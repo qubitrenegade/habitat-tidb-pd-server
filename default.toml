@@ -28,8 +28,8 @@ format = "text"
 disable-timestamp = true
 
 # file logging
-[log.file]
-filename = ""
+# [log.file]
+# filename = ""
 # max log file size in MB
 #max-size = 300
 # max log file keep days
