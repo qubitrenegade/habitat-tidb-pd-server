@@ -1,11 +1,11 @@
 pkg_name=pd
 pkg_distname=pd-server
-pkg_origin=qubitrenegade
+pkg_origin=qbr
 pkg_version=2.0.3
 pkg_maintainer="QubitRenegade <qubitrenegade@gmail.com>"
 pkg_license=("MPL-2")
 pkg_source=http://download.pingcap.org/tidb-v${pkg_version}-linux-amd64.tar.gz
-pkg_shasum=68fb6c3d112f497c5c0c90c94d68cf85f26312a9a1334598659e35fd7dcc94b1
+pkg_shasum=be725a370345504ed9dc495ec3bec1876b099eedf29486afe2e3da61b2bea038
 pkg_deps=(core/bash)
 pkg_build_deps=()
 pkg_bin_dirs=(bin)
