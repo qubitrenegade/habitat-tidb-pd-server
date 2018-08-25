@@ -8,6 +8,9 @@ This package attempts to automate the running of a PD Cluster.
 
 ## Usage
 
+Refer to parent project [Habitat TiDB Documentation](https://github.com/qubitrenegade/habitat-tidb-server) for full usage instructions.
+
+
 [Docker Hub](https://hub.docker.com/r/qbrd/pd/)
 
 ```
