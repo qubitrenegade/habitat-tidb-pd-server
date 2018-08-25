@@ -18,7 +18,9 @@ peer-port = 2380
 [log]
 # log level: debug, info, warn, error, fatal (default 'info')
 # THEIR default is info, so... uh we're overriding that for now
-level = "debug"
+# level = "debug"
+# ok, back to default
+level = "info"
 # log format, one of json, text, console
 format = "text"
 # disable automatic timestamps in output

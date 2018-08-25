@@ -8,11 +8,11 @@ This package attempts to automate the running of a PD Cluster.
 
 ## Usage
 
+[Docker Hub](https://hub.docker.com/r/qbrd/pd/)
+
 ```
-hab studio enter
-hab pkg export docker qubitrenegade/pd
 # run this x3
-docker run qubitrenegade/pd --peer 172.17.0.2 --peer 172.17.0.3 --peer 172.17.0.4 --topology leader
+docker run qbrd/pd --peer 172.17.0.3 --peer 172.17.0.5 --topology leader
 ```
 
 Seems to work in limited testing.
